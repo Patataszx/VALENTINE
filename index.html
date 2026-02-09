@@ -48,21 +48,25 @@
             z-index: 10;
         }
 
-        .img-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        /* Video Containers */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 177%; /* Aspect ratio for vertical shorts */
+            height: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
-        .img-group img {
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 15px;
-            opacity: 0;
-            transform: translateY(15px);
-            animation: fadeInUp 0.8s ease-out forwards;
+            height: 100%;
+            border: none;
         }
 
         h1 { color: var(--dark-pink); font-size: 1.8rem; margin: 1rem 0; }
@@ -90,26 +94,6 @@
 
         .hidden { display: none !important; }
 
-        /* Optimized for YouTube Shorts (Vertical) */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 177%; /* Aspect ratio for vertical video */
-            height: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
         .confetti {
@@ -125,11 +109,13 @@
 
     <div id="container-wrapper">
         <div id="main-content">
-            <div class="img-group">
-                <img src="https://ibb.co/ksCf2RY7">
-                <img src="p2.jpg">
-                <img src="p3.jpg">
-                <img src="p4.jpg">
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube-nocookie.com/embed/mGTUZedzCC0?autoplay=1&mute=1&loop=1&playlist=mGTUZedzCC0" 
+                    allow="autoplay; encrypted-media" 
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
             </div>
             <h1>Will you be my Valentine aking MAHAL? ❤️</h1>
             <div class="buttons">
@@ -141,7 +127,7 @@
         <div id="celebration" class="hidden">
             <div class="video-container">
                 <iframe 
-                    id="youtubeVideo"
+                    id="celebrationVideo"
                     src="https://www.youtube-nocookie.com/embed/mGTUZedzCC0?enablejsapi=1&rel=0&mute=1&loop=1&playlist=mGTUZedzCC0" 
                     allow="autoplay; encrypted-media" 
                     referrerpolicy="strict-origin-when-cross-origin"
@@ -174,9 +160,9 @@
             celebration.classList.remove('hidden');
             document.body.style.backgroundColor = "#ffb6c1";
             
-            const iframe = document.getElementById('youtubeVideo');
-            // This triggers the play and unmutes the video
-            iframe.src = iframe.src.replace("mute=1", "autoplay=1&mute=0");
+            const celebrationIframe = document.getElementById('celebrationVideo');
+            // Starts celebration video with sound
+            celebrationIframe.src = celebrationIframe.src.replace("mute=1", "autoplay=1&mute=0");
 
             for (let i = 0; i < 150; i++) { createConfetti(); }
         }
@@ -197,12 +183,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
