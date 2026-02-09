@@ -90,44 +90,24 @@
 
         .hidden { display: none !important; }
 
-        /* Video Container */
+        /* Optimized for YouTube Shorts (Vertical) */
         .video-container {
             position: relative;
             width: 100%;
+            padding-bottom: 177%; /* Aspect ratio for vertical video */
+            height: 0;
             border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        video {
-            width: 100%;
-            display: block;
-        }
-
-        /* The Custom Play Button */
-        .play-overlay {
+        .video-container iframe {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 77, 109, 0.8);
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            animation: heartbeat 1.5s infinite;
-            transition: opacity 0.3s;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
@@ -159,11 +139,14 @@
         </div>
 
         <div id="celebration" class="hidden">
-            <div class="video-container" onclick="togglePlay()">
-                <video id="celebrationVideo" playsinline preload="auto">
-                    <source src="celebration.mp4" type="video/mp4">
-                </video>
-                <div id="playBtn" class="play-overlay">▶</div>
+            <div class="video-container">
+                <iframe 
+                    id="youtubeVideo"
+                    src="https://www.youtube-nocookie.com/embed/mGTUZedzCC0?enablejsapi=1&rel=0&mute=1&loop=1&playlist=mGTUZedzCC0" 
+                    allow="autoplay; encrypted-media" 
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
             </div>
             <h1>Yay! Happy 31st Monthsary Mahaaaaaal! 🥰</h1>
         </div>
@@ -173,10 +156,7 @@
         const noBtn = document.getElementById('noBtn');
         const mainContent = document.getElementById('main-content');
         const celebration = document.getElementById('celebration');
-        const video = document.getElementById('celebrationVideo');
-        const playBtn = document.getElementById('playBtn');
 
-        // Move "No" Button
         const moveButton = () => {
             const padding = 50;
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
@@ -189,25 +169,16 @@
         noBtn.addEventListener('mouseenter', moveButton);
         noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
-        // Switch to Celebration
         function celebrate() {
             mainContent.classList.add('hidden');
             celebration.classList.remove('hidden');
             document.body.style.backgroundColor = "#ffb6c1";
-            video.load();
-            for (let i = 0; i < 150; i++) { createConfetti(); }
-        }
+            
+            const iframe = document.getElementById('youtubeVideo');
+            // This triggers the play and unmutes the video
+            iframe.src = iframe.src.replace("mute=1", "autoplay=1&mute=0");
 
-        // Custom Toggle Play
-        function togglePlay() {
-            if (video.paused) {
-                video.play();
-                playBtn.style.opacity = '0'; // Hide play button when playing
-                video.controls = true; // Show native controls once started
-            } else {
-                video.pause();
-                playBtn.style.opacity = '1';
-            }
+            for (let i = 0; i < 150; i++) { createConfetti(); }
         }
 
         function createConfetti() {
