@@ -9,7 +9,7 @@
             --primary-pink: #ff4d6d;
             --soft-pink: #ffe4e1;
             --dark-pink: #d63384;
-            --white: rgba(255, 255, 255, 0.95);
+            --white: rgba(255, 255, 255, 0.9);
         }
 
         body {
@@ -22,6 +22,7 @@
             background-image: url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
             font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
             text-align: center;
@@ -38,7 +39,7 @@
 
         #container-wrapper {
             background: var(--white);
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
             max-width: 90%;
@@ -79,15 +80,24 @@
         }
 
         #yesBtn { background-color: var(--primary-pink); color: white; }
-        #noBtn { background-color: #adb5bd; color: white; position: relative; }
+        #noBtn { background-color: #adb5bd; color: white; z-index: 1000; }
 
         .hidden { display: none !important; }
 
+        /* Video Styling */
         video {
             width: 100%;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background-color: black;
+        }
+
+        .fallback-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--dark-pink);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
         }
 
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
@@ -108,4 +118,67 @@
             <div class="img-group">
                 <img src="https://scontent.fmnl9-7.fna.fbcdn.net/v/t39.30808-6/553333605_25229226633362362_7982703732687138840_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&oh=00_AfutAJ-G8DOxlywhOB-7DaG4ohDQgeMrv-HjZWy4uPj2BA&oe=699013B4">
                 <img src="https://scontent.fmnl9-1.fna.fbcdn.net/v/t39.30808-6/495221309_24089387260679644_221556067084766233_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&oh=00_AftaoFIEw8QnOl_LDRPSsbkVkwEPOV-Q97-YZo6Pi1gTtw&oe=6990115B">
-                <img src="
+                <img src="https://scontent.fmnl9-7.fna.fbcdn.net/v/t39.30808-6/519874090_24596613283290370_318165589383833930_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&oh=00_Afv-3W8cTcw02UCgFG3qokQ9auAunGRgXfNh7Geu4nLC7w&oe=69902B7D">
+                <img src="https://scontent.fmnl9-2.fna.fbcdn.net/v/t39.30808-6/554829077_25229226543362371_2606283067329276854_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&oh=00_AfveO2Ile1w1BeuFCdmToAcEGw4eD5caQvKN_LdL5OE0MQ&oe=699020FC">
+            </div>
+            <h1>Will you be my Valentine aking MAHAL? ❤️</h1>
+            <div class="buttons">
+                <button id="yesBtn" onclick="celebrate()">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="celebration" class="hidden">
+            <video id="celebrationVideo" controls playsinline preload="auto">
+                <source src="celebration.mp4" type="video/mp4">
+            </video>
+            <h1>Yay! Happy 31st Monthsary Mahaaaaaal! 🥰</h1>
+            <a href="celebration.mp4" class="fallback-link" id="fbLink">If video doesn't play, click here to watch ❤️</a>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const mainContent = document.getElementById('main-content');
+        const celebration = document.getElementById('celebration');
+        const video = document.getElementById('celebrationVideo');
+
+        const moveButton = () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        };
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+
+        function celebrate() {
+            mainContent.classList.add('hidden');
+            celebration.classList.remove('hidden');
+            document.body.style.backgroundColor = "#ffb6c1";
+            
+            // Forces video load and play
+            video.load();
+            video.play().catch(e => {
+                console.log("Play failed, manual interaction needed.");
+            });
+
+            for (let i = 0; i < 100; i++) { createConfetti(); }
+        }
+
+        function createConfetti() {
+            const colors = ['#ff4d6d', '#ffb6c1', '#d63384', '#ffffff'];
+            const c = document.createElement('div');
+            c.className = 'confetti';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            c.style.width = Math.random() * 8 + 5 + 'px';
+            c.style.height = c.style.width;
+            c.style.animationDuration = Math.random() * 2 + 2 + 's';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
