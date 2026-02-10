@@ -71,7 +71,6 @@
             border: none;
         }
 
-        /* Navigation Arrows */
         .nav-btn {
             position: absolute;
             top: 50%;
@@ -84,7 +83,6 @@
             border-radius: 50%;
             cursor: pointer;
             z-index: 20;
-            font-weight: bold;
         }
 
         .prev { left: 10px; }
@@ -94,10 +92,15 @@
 
         .buttons { 
             display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            min-height: 50px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; 
             margin-top: 10px;
+        }
+
+        .row-btns {
+            display: flex;
+            gap: 15px;
         }
 
         button.choice {
@@ -108,10 +111,52 @@
             border-radius: 50px;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         #yesBtn { background-color: var(--primary-pink); color: white; }
         #noBtn { background-color: #adb5bd; color: white; }
+        #msgBtn { background-color: var(--dark-pink); color: white; margin-top: 10px; }
+
+        /* Message Modal */
+        #messageBox {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 85%;
+            max-width: 350px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        #messageBox.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        #messageBox p {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 1.4rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .close-msg {
+            margin-top: 20px;
+            background: #eee;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
 
         .hidden { display: none !important; }
 
@@ -145,17 +190,29 @@
 
             <h1>Will you be my Valentine aking MAHAL? ❤️</h1>
             <div class="buttons">
-                <button id="yesBtn" class="choice" onclick="celebrate()">Yes</button>
-                <button id="noBtn" class="choice">No</button>
+                <div class="row-btns">
+                    <button id="yesBtn" class="choice" onclick="celebrate()">Yes</button>
+                    <button id="noBtn" class="choice">No</button>
+                </div>
             </div>
         </div>
 
         <div id="celebration" class="hidden">
-            <div class="slider-container">
-                 <iframe id="celebrationVideo" src="https://www.youtube.com/embed/mGTUZedzCC0?autoplay=1&mute=0" allow="autoplay"></iframe>
+            <div class="slider-container" style="height: 550px; width: 100%; max-width: 320px; margin: 0 auto 15px;">
+                 <iframe id="celebrationVideo" src="https://www.youtube.com/embed/SWqNCmXFqHU?enablejsapi=1" allow="autoplay; encrypted-media" style="width: 100%; height: 100%; border-radius: 20px;"></iframe>
             </div>
             <h1>Yay! Happy 31st Monthsary Mahaaaaaal! 🥰</h1>
+            <button id="msgBtn" class="choice" onclick="toggleMessage()">Read My Message 💌</button>
         </div>
+    </div>
+
+    <div id="messageBox">
+        <h3>To My Dearest Mahal,</h3>
+        <p>
+            You are the best thing that ever happened to me. Thank you for 31 amazing months of love, laughter, and being my partner in everything. 
+            I love you so much! ❤️
+        </p>
+        <button class="close-msg" onclick="toggleMessage()">Close</button>
     </div>
 
     <script>
@@ -183,7 +240,15 @@
         function celebrate() {
             document.getElementById('main-content').classList.add('hidden');
             document.getElementById('celebration').classList.remove('hidden');
+            
+            const v = document.getElementById('celebrationVideo');
+            v.src += "&autoplay=1"; 
+
             for (let i = 0; i < 100; i++) { createConfetti(); }
+        }
+
+        function toggleMessage() {
+            document.getElementById('messageBox').classList.toggle('active');
         }
 
         function createConfetti() {
